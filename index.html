@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Boilerplate -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="style.css" rel="stylesheet">
+  <link href="assets/calculator.ico" rel="icon">
+  <script src="script.js" defer></script>
+  <title>JavaScript Calculator</title>
+  <script>
+    setInterval(() => location.reload(), 1000);
+  </script>
+</head>
+
+<body>
+  <header>
+    JavaScript Calculator
+    <br />
+    by <a target="_blank"
+          rel="noreferrer"
+          href="https://github.com/eldarlrd">
+          eldarlrd</a>
+  </header>
+  <!-- Container -->
+  <main>
+    <div id="screen">
+      <div id="formula"></div>
+      <div id="display">0</div>
+    </div>
+    <div id="keypad">
+      <button id="clear" class="deletion">AC</button>
+      <button id="single-clear" class="deletion">C</button>
+      <button id="remainder" class="operator">%</button>
+      <button id="divide" class="operator">&divide</button>
+      <button id="seven">7</button>
+      <button id="eight">8</button>
+      <button id="nine">9</button>
+      <button id="multiply" class="operator">&times</button>
+      <button id="four">4</button>
+      <button id="five">5</button>
+      <button id="six">6</button>
+      <button id="subtract" class="operator">-</button>
+      <button id="one">1</button>
+      <button id="two">2</button>
+      <button id="three">3</button>
+      <button id="add" class="operator">+</button>
+      <button id="zero">0</button>
+      <button id="decimal">.</button>
+      <button id="equals">=</button>
+    </div>
+  </main>
+</body>
+
+</html>

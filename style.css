@@ -1,0 +1,119 @@
+@font-face {
+  font-family: Digital-7;
+  src: url(assets/Digital-7.ttf);
+}
+
+:root {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: slategray;
+  --white: ghostwhite;
+  --onyx: #0F0F0F;
+  --shadow: 0 0 2px 1px var(--onyx);
+  --lg-shadow: 0 0 4px 1px var(--onyx);
+}
+/* Header */
+header {
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  position: absolute;
+  color: var(--white);
+  top: 2rem;
+}
+
+a {
+  font-style: italic;
+  color: var(--white);
+}
+a:hover {
+  color: var(--onyx);
+}
+a:active {
+  color: mediumvioletred;
+}
+/* Container */
+main {
+  font-family: Digital-7, monospace;
+  display: flex;
+  flex-direction: column;
+  width: 14em;
+  height: 22em;
+  gap: 1em;
+  padding: 2em;
+  border-radius: 1em;
+  box-shadow: var(--lg-shadow);
+  background: gainsboro;
+}
+/* Screen */
+#screen {
+  box-shadow: inset var(--lg-shadow);
+  text-align: right;
+  height: 4em;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: #4F4F4F;
+}
+
+#formula {
+  height: 1em;
+  font-size: 22px;
+  color: #00DD66;
+}
+
+#display {
+  font-size: 32px;
+  color: var(--white);
+}
+/* Keypad */
+#keypad {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 7px;
+}
+
+button {
+  border: 0;
+  outline: none;
+  font-family: inherit;
+  font-size: 24px;
+  width: 2em;
+  height: 2em;
+  border-radius: 1em;
+  box-shadow: var(--shadow);
+  background: var(--white);
+}
+button:hover {
+  box-shadow: var(--lg-shadow);
+}
+button:active {
+  color: var(--white);
+  background: dimgray;
+}
+
+.deletion:active {
+  background: firebrick;
+}
+
+.operator:active {
+  background: dodgerblue;
+}
+
+#equals {
+  width: 100%;
+  grid-area: 5 / 3 / span 1 / span 2;
+}
+#equals:active {
+  background: forestgreen;
+}
+/* Responsive */
+@media only screen and (max-height: 576px) {
+  :root {
+    padding: 3em;
+  }
+
+  header {
+    visibility: hidden;
+  }
+}
