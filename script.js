@@ -12,6 +12,7 @@ class Calculator {
   constructor(prevElem, elem) {
     this.prevElem = prevElem;
     this.elem = elem;
+    this.clearNext = null;
     this.allClear();
   }
 
@@ -22,15 +23,23 @@ class Calculator {
   }
 
   clear() {
-    this.oper === "0"
-      ? this.oper
-      : this.oper = this.oper.toString().slice(0, -1);
+    if (this.clearNext !== null) {
+      this.clearNext = null;
+      this.oper = "0";
+    } if (isNaN(this.oper) && this.oper.match(/[E+]/g)) {
+        this.oper = "0";
+      } this.oper === "0"
+          ? this.oper
+          : this.oper = this.oper.toString().slice(0, -1);
   }
 
   append(num) {
-    if (num === "." && this.oper.includes(".")) {
-      return;
-    } this.oper = this.oper.toString() + num.toString();
+    if (this.clearNext !== null) {
+      this.clearNext = null;
+      this.oper = "0";
+    } if (num === "." && this.oper.includes(".")) {
+        return;
+      } this.oper = (this.oper.toString() + num.toString()).slice(0, 13);
   }
 
   operate(operator) {
@@ -39,7 +48,7 @@ class Calculator {
     } if (this.prevOper !== "") {
       this.calculate();
     }
-    this.operator = operator;
+    this.operator = operator.replace("*", "×").replace("/", "÷");
     this.prevOper = this.oper;
     this.oper = "0";
   }
@@ -67,9 +76,15 @@ class Calculator {
         case "%":
           result = prev % curr;
     }
-    this.oper = Math.round(result * 1e4) / 1e4;
+    if (result >= 1000000000000) {
+      this.oper = result.toExponential(5);
+      
+    } else if (!Number.isInteger(result)) {
+        this.oper = parseFloat(result.toFixed(6));
+      } else this.oper = result;
     this.prevOper = "";
     this.operator = undefined;
+    this.clearNext = this.oper;
   }
 
   getNum(num) {
@@ -88,10 +103,12 @@ class Calculator {
   }
 
   update() {
-    this.elem.innerText = this.getNum(this.oper);
+    if (this.getNum(this.oper) === "") {
+      this.elem.innerText = "Undefined";
+    } else this.elem.innerText = this.getNum(this.oper);
     this.operator != null
       ? this.prevElem.innerText =
-          `${this.operator} ${this.getNum(this.prevOper)}`
+          `${this.getNum(this.prevOper)} ${this.operator}`
       : this.prevElem.innerText = "";
   }
 }

@@ -48,9 +48,7 @@ main {
 }
 /* Screen */
 #screen {
-  direction: rtl;
-  overflow-x: scroll;
-  overflow-y: hidden;
+  overflow: hidden;
   box-shadow: inset var(--lg-shadow);
   text-align: right;
   height: 4em;
@@ -63,12 +61,15 @@ main {
   white-space: nowrap;
   height: 1em;
   font-size: 22px;
+  padding-right: 2px;
   color: #00DD66;
 }
 
 #display {
   font-size: 32px;
+  height: 1em;
   padding-top: 4px;
+  padding-right: 2px;
   color: var(--white);
 }
 /* Keypad */
