@@ -126,3 +126,33 @@ eqlKey.addEventListener("click", () => {
   calc.calculate();
   calc.update();
 })
+// Keyboard
+document.addEventListener("keydown", e => {
+  const numPress = /\d/g;
+  const operPress = /[+\-*/%]/g;
+  if (e.key.match(numPress) || e.key === ".") {
+    e.preventDefault();
+    calc.append(e.key);
+    calc.update();
+  }
+  if (e.key.match(operPress)) {
+    e.preventDefault();
+    calc.operate(e.key);
+    calc.update();
+  }
+  if (e.key === "Enter" || e.key === "=") {
+    e.preventDefault();
+    calc.calculate();
+    calc.update();
+  }
+  if (e.key === "Backspace") {
+    e.preventDefault();
+    calc.clear();
+    calc.update();
+  }
+  if (e.key === "Delete") {
+    e.preventDefault();
+    calc.allClear();
+    calc.update();
+  }
+})
