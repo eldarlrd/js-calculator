@@ -22,14 +22,14 @@ class Calculator {
   allClear() {
     this.prevOperand = "";
     this.operand = "0";
-    this.operator;
+    this.operator = null;
   }
 
   clear() {
     if (this.clearNext) {
       this.clearNext = null;
       this.operand = "0";
-    } if (isNaN(this.operand) && this.operand.match(/[E+]/g)) {
+    } if (isNaN(this.operand) || this.operand.match(/[E+]/g)) {
         this.operand = "0";
       } this.operand === "0"
           ? this.operand
@@ -40,7 +40,7 @@ class Calculator {
     if (this.clearNext) {
       this.clearNext = null;
       this.operand = "0";
-    } if (num === "." && this.operand.includes(".")) {
+    } if (num === "." && this.operand.toString().includes(".")) {
         return;
       } this.operand = (this.operand.toString() + num.toString()).slice(0, 13);
   }
@@ -96,7 +96,7 @@ class Calculator {
     let intText;
 
     if (isNaN(int)) {
-      intText = "";
+      intText = "Undefined";
     } else {
         intText = int.toLocaleString("en", { maximumFractionDigits: 0 });
       } if (dec != null) {
@@ -105,9 +105,7 @@ class Calculator {
   }
 
   update() {
-    if (this.build(this.operand) === "") {
-      this.display.innerText = "Undefined";
-    } else this.display.innerText = this.build(this.operand);
+    this.display.innerText = this.build(this.operand);
     this.operator
       ? this.formula.innerText =
           `${this.build(this.prevOperand)} ${this.operator}`
