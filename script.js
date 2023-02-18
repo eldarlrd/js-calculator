@@ -145,7 +145,7 @@ eqlKey.addEventListener("click", () => {
 })
 // Keyboard
 document.addEventListener("keydown", e => {
-  const numPress = /\d/g;
+  const numPress = /^\d/g;
   const operPress = /[+\-*/%]/g;
   if (e.key.match(numPress) || e.key === ".") {
     e.preventDefault();
