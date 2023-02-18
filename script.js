@@ -26,7 +26,7 @@ class Calculator {
   }
 
   clear() {
-    if (this.clearNext) {
+    if (this.clearNext !== null) {
       this.clearNext = null;
       this.operand = "0";
     } if (isNaN(this.operand) || this.operand.match(/[E+]/g)) {
@@ -37,7 +37,7 @@ class Calculator {
   }
 
   append(num) {
-    if (this.clearNext) {
+    if (this.clearNext !== null) {
       this.clearNext = null;
       this.operand = "0";
     } if (num === "." && this.operand.toString().includes(".")) {

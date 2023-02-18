@@ -66,8 +66,8 @@ main {
 }
 
 #display {
-  font-size: 32px;
   height: 1em;
+  font-size: 32px;
   padding-top: 4px;
   padding-right: 2px;
   color: var(--white);
@@ -116,7 +116,7 @@ button:active {
 /* Responsive */
 @media only screen and (max-height: 576px) {
   :root {
-    padding: 3em;
+    padding: 4em;
   }
 
   header {
