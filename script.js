@@ -1,62 +1,65 @@
-// Display
-const prevElem = document.getElementById("formula");
-const elem = document.getElementById("display");
+"use strict";
+// Screen
+const formula = document.getElementById("formula");
+const display = document.getElementById("display");
 // Keys
 const numKeys = Array.from(document.getElementsByClassName("number"));
 const operKeys = Array.from(document.getElementsByClassName("operator"));
 const clrKey = document.getElementById("single-clear");
 const allClrKey = document.getElementById("clear");
 const eqlKey = document.getElementById("equals");
+// Shorthand
+const oneT = 1000000000000;
 // Calculator
 class Calculator {
-  constructor(prevElem, elem) {
-    this.prevElem = prevElem;
-    this.elem = elem;
-    this.clearNext = null;
+  constructor(formula, display) {
+    this.formula = formula;
+    this.display = display;
+    this.clearNext;
     this.allClear();
   }
 
   allClear() {
-    this.prevOper = "";
-    this.oper = "0";
-    this.operator = undefined;
+    this.prevOperand = "";
+    this.operand = "0";
+    this.operator;
   }
 
   clear() {
-    if (this.clearNext !== null) {
+    if (this.clearNext) {
       this.clearNext = null;
-      this.oper = "0";
-    } if (isNaN(this.oper) && this.oper.match(/[E+]/g)) {
-        this.oper = "0";
-      } this.oper === "0"
-          ? this.oper
-          : this.oper = this.oper.toString().slice(0, -1);
+      this.operand = "0";
+    } if (isNaN(this.operand) && this.operand.match(/[E+]/g)) {
+        this.operand = "0";
+      } this.operand === "0"
+          ? this.operand
+          : this.operand = this.operand.toString().slice(0, -1);
   }
 
   append(num) {
-    if (this.clearNext !== null) {
+    if (this.clearNext) {
       this.clearNext = null;
-      this.oper = "0";
-    } if (num === "." && this.oper.includes(".")) {
+      this.operand = "0";
+    } if (num === "." && this.operand.includes(".")) {
         return;
-      } this.oper = (this.oper.toString() + num.toString()).slice(0, 13);
+      } this.operand = (this.operand.toString() + num.toString()).slice(0, 13);
   }
 
   operate(operator) {
-    if (this.oper === "") {
+    if (this.operand === "") {
       return;
-    } if (this.prevOper !== "") {
-      this.calculate();
-    }
+    } if (this.prevOperand !== "") {
+        this.calculate();
+      }
     this.operator = operator.replace("*", "×").replace("/", "÷");
-    this.prevOper = this.oper;
-    this.oper = "0";
+    this.prevOperand = this.operand;
+    this.operand = "";
   }
 
   calculate() {
-    const prev = parseFloat(this.prevOper);
-    const curr = parseFloat(this.oper);
-    let result;
+    const prev = +this.prevOperand;
+    const curr = +this.operand;
+    let result = 0;
 
     if (isNaN(prev) || isNaN(curr)) {
       return;
@@ -75,46 +78,45 @@ class Calculator {
           break;
         case "%":
           result = prev % curr;
-    }
-    if (result >= 1000000000000) {
-      this.oper = result.toExponential(5);
-      
+      }
+    if (result >= oneT || result <= -oneT) {
+      this.operand = result.toExponential(5);
     } else if (!Number.isInteger(result)) {
-        this.oper = parseFloat(result.toFixed(6));
-      } else this.oper = result;
-    this.prevOper = "";
-    this.operator = undefined;
-    this.clearNext = this.oper;
+        this.operand = +result.toFixed(6);
+      } else this.operand = result;
+    this.prevOperand = "";
+    this.operator = null;
+    this.clearNext = this.operand;
   }
 
-  getNum(num) {
+  build(num) {
     const strNum = num.toString();
-    const int = parseFloat(strNum.split(".")[0]);
+    const int = +strNum.split(".")[0];
     const dec = strNum.split(".")[1];
     let intText;
 
     if (isNaN(int)) {
       intText = "";
     } else {
-      intText = int.toLocaleString("en", { maximumFractionDigits: 0 });
-    } if (dec != null) {
-        return `${intText}.${dec}`;
-    } else return intText;
+        intText = int.toLocaleString("en", { maximumFractionDigits: 0 });
+      } if (dec != null) {
+          return `${intText}.${dec}`;
+        } else return intText;
   }
 
   update() {
-    if (this.getNum(this.oper) === "") {
-      this.elem.innerText = "Undefined";
-    } else this.elem.innerText = this.getNum(this.oper);
-    this.operator != null
-      ? this.prevElem.innerText =
-          `${this.getNum(this.prevOper)} ${this.operator}`
-      : this.prevElem.innerText = "";
+    if (this.build(this.operand) === "") {
+      this.display.innerText = "Undefined";
+    } else this.display.innerText = this.build(this.operand);
+    this.operator
+      ? this.formula.innerText =
+          `${this.build(this.prevOperand)} ${this.operator}`
+      : this.formula.innerText = "";
   }
 }
 
-const calc = new Calculator(prevElem, elem);
-// Calls
+const calc = new Calculator(formula, display);
+// Mouse
 numKeys.forEach(key => {
   key.addEventListener("click", () => {
     calc.append(key.innerText);
