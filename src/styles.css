@@ -1,6 +1,6 @@
 @font-face {
-  font-family: Digital-7;
-  src: url(assets/Digital-7.ttf);
+  font-family: "Digital-7";
+  src: url('assets/fonts/Digital-7.woff2') format('woff2');
 }
 
 :root {
@@ -9,11 +9,13 @@
   align-items: center;
   justify-content: center;
   background: slategray;
+
   --white: ghostwhite;
   --onyx: #0F0F0F;
   --shadow: 0 0 2px 1px var(--onyx);
   --lg-shadow: 0 0 4px 1px var(--onyx);
 }
+
 /* Header */
 header {
   font-family: Arial, sans-serif;
@@ -27,15 +29,18 @@ a {
   font-style: italic;
   color: var(--white);
 }
+
 a:hover {
   color: var(--onyx);
 }
+
 a:active {
   color: mediumvioletred;
 }
+
 /* Container */
 main {
-  font-family: Digital-7, monospace;
+  font-family: "Digital-7", monospace;
   display: flex;
   flex-direction: column;
   width: 14em;
@@ -46,6 +51,7 @@ main {
   box-shadow: var(--lg-shadow);
   background: gainsboro;
 }
+
 /* Screen */
 #screen {
   overflow: hidden;
@@ -62,7 +68,7 @@ main {
   height: 1em;
   font-size: 22px;
   padding-right: 2px;
-  color: #00DD66;
+  color: #0D6;
 }
 
 #display {
@@ -72,6 +78,7 @@ main {
   padding-right: 2px;
   color: var(--white);
 }
+
 /* Keypad */
 #keypad {
   display: grid;
@@ -90,9 +97,11 @@ button {
   box-shadow: var(--shadow);
   background: var(--white);
 }
+
 button:hover {
   box-shadow: var(--lg-shadow);
 }
+
 button:active {
   color: var(--white);
   background: dimgray;
@@ -110,11 +119,13 @@ button:active {
   width: 100%;
   grid-area: 5 / 3 / span 1 / span 2;
 }
+
 #equals:active {
   background: forestgreen;
 }
+
 /* Responsive */
-@media only screen and (max-height: 576px) {
+@media only screen and (height <= 576px) {
   :root {
     padding: 4em;
   }
