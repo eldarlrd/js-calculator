@@ -1,22 +1,23 @@
 @font-face {
-  font-family: "Digital-7";
+  font-family: 'Digital-7';
   src: url('assets/fonts/Digital-7.woff2') format('woff2');
 }
 
 :root {
   height: 100%;
   display: flex;
+  user-select: none;
   align-items: center;
   justify-content: center;
   background: slategray;
 
   --white: ghostwhite;
-  --onyx: #0F0F0F;
+  --gray: #4f4f4f;
+  --onyx: #0f0f0f;
   --shadow: 0 0 2px 1px var(--onyx);
   --lg-shadow: 0 0 4px 1px var(--onyx);
 }
 
-/* Header */
 header {
   font-family: Arial, sans-serif;
   font-weight: bold;
@@ -38,9 +39,8 @@ a:active {
   color: mediumvioletred;
 }
 
-/* Container */
 main {
-  font-family: "Digital-7", monospace;
+  font-family: 'Digital-7', monospace;
   display: flex;
   flex-direction: column;
   width: 14em;
@@ -52,7 +52,6 @@ main {
   background: gainsboro;
 }
 
-/* Screen */
 #screen {
   overflow: hidden;
   box-shadow: inset var(--lg-shadow);
@@ -60,7 +59,7 @@ main {
   height: 4em;
   padding: 6px 8px;
   border-radius: 8px;
-  background: #4F4F4F;
+  background: var(--gray);
 }
 
 #formula {
@@ -68,7 +67,7 @@ main {
   height: 1em;
   font-size: 22px;
   padding-right: 2px;
-  color: #0D6;
+  color: #0d6;
 }
 
 #display {
@@ -77,9 +76,14 @@ main {
   padding-top: 4px;
   padding-right: 2px;
   color: var(--white);
+  user-select: text;
+
+  &::selection {
+    color: var(--gray);
+    background: var(--white);
+  }
 }
 
-/* Keypad */
 #keypad {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -90,6 +94,7 @@ button {
   border: 0;
   outline: none;
   font-family: inherit;
+  cursor: pointer;
   font-size: 24px;
   width: 2em;
   height: 2em;
@@ -124,7 +129,6 @@ button:active {
   background: forestgreen;
 }
 
-/* Responsive */
 @media only screen and (height <= 576px) {
   :root {
     padding: 4em;

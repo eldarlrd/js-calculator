@@ -1,75 +1,84 @@
 'use strict';
 
-// Screen
+// Screen Elements
 const formula = document.getElementById('formula');
 const display = document.getElementById('display');
 
 // Keys
-const numKeys = Array.from(document.getElementsByClassName('number'));
-const operKeys = Array.from(document.getElementsByClassName('operator'));
-const clrKey = document.getElementById('single-clear');
-const allClrKey = document.getElementById('clear');
-const eqlKey = document.getElementById('equals');
+const numberKeys = Array.from(document.getElementsByClassName('number'));
+const operandKeys = Array.from(document.getElementsByClassName('operator'));
+const clearKey = document.getElementById('single-clear');
+const allClearKey = document.getElementById('clear');
+const equalsKey = document.getElementById('equals');
 
-// Shorthand
-const oneT = 1000000000000;
+const ONE_TRILLION = 1e12;
 
 class Calculator {
-  constructor(formula, display) {
-    this.formula = formula;
-    this.display = display;
-    this.clearNext;
+  constructor(formulaElement, displayElement) {
+    this.formulaElement = formulaElement;
+    this.displayElement = displayElement;
+    this.clearNext = false;
     this.allClear();
   }
 
   allClear() {
     this.prevOperand = '';
-    this.operand = '0';
+    this.currOperand = '0';
     this.operator = null;
+    this.clearNext = false;
+    this.updateDisplay();
   }
 
   clear() {
-    if (this.clearNext !== null) {
-      this.clearNext = null;
-      this.operand = '0';
+    if (this.clearNext) {
+      this.clearNext = false;
+      this.currOperand = '0';
     }
 
-    if (isNaN(this.operand) || this.operand.match(/[E+]/g)) this.operand = '0';
+    if (isNaN(this.currOperand) || this.currOperand.includes('E+'))
+      this.currOperand = '0';
 
-    this.operand === '0' ?
-      this.operand
-    : (this.operand = this.operand.toString().slice(0, -1));
+    this.currOperand =
+      this.currOperand.length === 1 ? '0' : this.currOperand.slice(0, -1);
+
+    this.updateDisplay();
   }
 
-  append(num) {
-    if (this.clearNext !== null) {
-      this.clearNext = null;
-      this.operand = '0';
+  appendNumber(num) {
+    if (this.clearNext) {
+      this.clearNext = false;
+      this.currOperand = '0';
     }
 
-    if (num === '.' && this.operand.toString().includes('.')) return;
+    if (num === '.' && this.currOperand === '') this.currOperand = '0.';
+    else if (num === '.' && this.currOperand.includes('.')) return;
+    else
+      this.currOperand = (this.currOperand.toString() + num.toString()).slice(
+        0,
+        13
+      );
 
-    this.operand = (this.operand.toString() + num.toString()).slice(0, 13);
+    this.updateDisplay();
   }
 
-  operate(operator) {
-    if (this.operand === '') return;
+  chooseOperation(operator) {
+    if (this.currOperand === '') return;
 
-    if (this.prevOperand !== '') this.calculate();
+    if (this.prevOperand) this.calculate();
 
+    // Replace for prettier signs
     this.operator = operator.replace('*', '×').replace('/', '÷');
-    this.prevOperand = this.operand;
-    this.operand = '';
+    this.prevOperand = this.currOperand;
+    this.currOperand = '';
+    this.updateDisplay();
   }
 
   calculate() {
     const prev = +this.prevOperand;
-    const curr = +this.operand;
-    let result = 0;
+    const curr = +this.currOperand;
+    let result;
 
-    if (isNaN(prev) || isNaN(curr)) {
-      return;
-    }
+    if (isNaN(prev) || isNaN(curr)) return;
 
     switch (this.operator) {
       case '+':
@@ -90,103 +99,95 @@ class Calculator {
 
       case '%':
         result = prev % curr;
+        break;
+
+      default:
+        return;
     }
 
-    if (result >= oneT || result <= -oneT)
-      this.operand = result.toExponential(5);
-    else if (!Number.isInteger(result)) this.operand = +result.toFixed(6);
-    else this.operand = result;
+    if (Math.abs(result) >= ONE_TRILLION)
+      this.currOperand = result.toExponential(5);
+    else
+      this.currOperand =
+        ~~result === result ? result.toString() : +result.toFixed(6);
+
     this.prevOperand = '';
     this.operator = null;
-    this.clearNext = this.operand;
+    this.clearNext = true;
+    this.updateDisplay();
   }
 
-  build(num) {
-    const strNum = num.toString();
-    const int = +strNum.split('.')[0];
-    const dec = strNum.split('.')[1];
-    let intText;
+  formatNumber(num) {
+    if (isNaN(num)) return undefined;
+    const [integer, decimal] = num.toString().split('.');
 
-    if (isNaN(int)) intText = 'Undefined';
-    else intText = int.toLocaleString('en', { maximumFractionDigits: 0 });
+    const formattedInt = +integer.toLocaleString('en', {
+      maximumFractionDigits: 0
+    });
 
-    if (dec !== undefined) return `${intText}.${dec}`;
-    else return intText;
+    return decimal !== undefined ? `${formattedInt}.${decimal}` : formattedInt;
   }
 
-  update() {
-    this.display.innerText = this.build(this.operand);
+  updateDisplay() {
+    this.displayElement.innerText = this.formatNumber(this.currOperand);
 
-    this.operator ?
-      (this.formula.innerText = `${this.build(this.prevOperand)} ${this.operator}`)
-    : (this.formula.innerText = '');
+    this.formulaElement.innerText =
+      this.operator ?
+        `${this.formatNumber(this.prevOperand)} ${this.operator}`
+      : '';
   }
 }
 
 const calc = new Calculator(formula, display);
 
 // Mouse
-numKeys.forEach(key => {
+numberKeys.forEach(key => {
   key.addEventListener('click', () => {
-    calc.append(key.innerText);
-    calc.update();
+    calc.appendNumber(key.innerText);
   });
 });
 
-operKeys.forEach(key => {
+operandKeys.forEach(key => {
   key.addEventListener('click', () => {
-    calc.operate(key.innerText);
-    calc.update();
+    calc.chooseOperation(key.innerText);
   });
 });
 
-clrKey.addEventListener('click', () => {
-  calc.clear();
-  calc.update();
-});
+clearKey.addEventListener('click', () => calc.clear());
 
-allClrKey.addEventListener('click', () => {
-  calc.allClear();
-  calc.update();
-});
+allClearKey.addEventListener('click', () => calc.allClear());
 
-eqlKey.addEventListener('click', () => {
-  calc.calculate();
-  calc.update();
-});
+equalsKey.addEventListener('click', () => calc.calculate());
 
 // Keyboard
 document.addEventListener('keydown', e => {
-  const numPress = /^\d/g;
-  const operPress = /[+\-*/%]/g;
+  const { key } = e;
 
-  if (e.key.match(numPress) || e.key === '.') {
+  if (/^\d/.test(key) || key === '.') {
     e.preventDefault();
-    calc.append(e.key);
-    calc.update();
+    calc.appendNumber(key);
   }
 
-  if (e.key.match(operPress)) {
+  if (/[+\-*/%]/.test(key)) {
     e.preventDefault();
-    calc.operate(e.key);
-    calc.update();
+    calc.chooseOperation(key);
   }
 
-  if (e.key === 'Enter' || e.key === '=') {
+  if (key === 'Enter' || key === '=') {
     e.preventDefault();
     calc.calculate();
-    calc.update();
   }
 
-  if (e.key === 'Backspace') {
+  if (key === 'Backspace') {
     e.preventDefault();
     calc.clear();
-    calc.update();
   }
 
-  if (e.key === 'Delete') {
+  if (key === 'Delete') {
     e.preventDefault();
     calc.allClear();
-    calc.update();
   }
 });
+
+// Easter Egg
+console.log('"Obvious" is the most dangerous word in mathematics.');
