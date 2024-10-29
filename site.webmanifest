@@ -1,0 +1,23 @@
+{
+  "name": "JS Calculator",
+  "short_name": "JS Calculator",
+  "dir": "ltr",
+  "lang": "en",
+  "categories": [
+    "productivity",
+    "utilities"
+  ],
+  "display": "minimal-ui",
+  "orientation": "natural",
+  "theme_color": "#dcdcdc",
+  "background_color": "#708090",
+  "description": "A Digital Calculator",
+  "start_url": "https://eldarlrd.github.io/js-calculator/",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
