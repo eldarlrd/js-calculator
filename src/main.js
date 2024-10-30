@@ -1,5 +1,25 @@
 'use strict';
 
+/**
+ * @license AGPL-3.0-only
+ * JS Calculator - A Digital Calculator
+ * Copyright (C) 2023-2024 Eldar Pashazade <eldarlrd@pm.me>
+ *
+ * This file is part of JS Calculator.
+ *
+ * JS Calculator is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, version 3.
+ *
+ * JS Calculator is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with JS Calculator. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 // Screen Elements
 const formula = document.getElementById('formula');
 const display = document.getElementById('display');
